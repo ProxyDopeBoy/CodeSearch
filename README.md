@@ -1,13 +1,15 @@
 Hi! This is a website that makes on Python Django framework.
-Features
 
-Create new posts
 
-Display a list of posts
+Features:
 
-Store data using SQLite (default Django database)
+1.Create new posts
 
-Basic frontend interaction with HTML and a small amount of JavaScript.
+2.Display a list of posts
+
+3.Store data using SQLite (default Django database)
+
+4.Basic frontend interaction with HTML and a small amount of JavaScript.
 
 Stack:
   Python Django
@@ -18,13 +20,13 @@ Stack:
 
 Structure of project:
 backend/
-│
+
 ├── django-backend/
-│   ├── CodeSearchProjects/
-│   │   ├── CodeSearchApp/
-│   │   │   ├── models.py
-│   │   │   ├── views.py
-│   │   │   ├── urls.py
-│   │   │   └── templates/
-│   │   └── settings.py
-│   └── manage.py
+│  ── CodeSearchProjects/
+│     ── CodeSearchApp/
+│       ── models.py
+│       ── views.py
+│        ── urls.py
+│         ── templates/
+│      ── settings.py
+│   ── manage.py
