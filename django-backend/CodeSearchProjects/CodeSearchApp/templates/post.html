@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+:root{
+    --bg: #0f1117;
+    --card: #161b22;
+    --border: #262c36;
+    --text: #e6edf3;
+    --muted: #8b949e;
+    --accent: #f39c12;
+    --accent-hover: #00bfff;
+}
+
+*{
+    box-sizing: border-box;
+}
+
+body{
+    margin: 0;
+    font-family: "Roboto", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+}
+
+/* ===== HEADER ===== */
+
+header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 40px;
+    height: 70px;
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+}
+
+.title{
+    font-size: 22px;
+    font-weight: 600;
+    text-decoration: none;
+    color: var(--text);
+    transition: .3s;
+}
+
+.title:hover{
+    color: var(--accent);
+}
+
+.container-profile{
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.container-profile img{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+}
+
+/* ===== MAIN ===== */
+
+main{
+    display: flex;
+    justify-content: center;
+    padding: 60px 20px;
+}
+
+.post-card{
+    width: 850px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 50px;
+    box-shadow: 0 0 40px rgba(0,0,0,0.4);
+}
+
+/* ===== TITLE ===== */
+
+.post-title{
+    font-size: 30px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 35px;
+}
+
+/* ===== AUTHOR ===== */
+
+.author-section{
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-bottom: 35px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+}
+
+.author-section img{
+    width: 65px;
+    height: 65px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--border);
+}
+
+.author-info{
+    display: flex;
+    flex-direction: column;
+}
+
+.author-name{
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.author-status{
+    font-size: 13px;
+    color: var(--muted);
+}
+
+/* ===== TEXT ===== */
+
+.post-text{
+    font-size: 17px;
+    line-height: 1.8;
+    margin-bottom: 35px;
+}
+
+/* ===== CODE ===== */
+
+.code-block{
+    background: #0d1117;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 25px;
+    font-family: monospace;
+    font-size: 14px;
+    color: #58a6ff;
+    overflow-x: auto;
+}
+
+/* ===== BUTTON ===== */
+
+.save-btn{
+    display: inline-block;
+    margin-top: 35px;
+    padding: 12px 22px;
+    border-radius: 8px;
+    background: var(--accent);
+    color: black;
+    text-decoration: none;
+    font-weight: 600;
+    transition: .3s;
+}
+
+.save-btn:hover{
+    background: var(--accent-hover);
+    color: white;
+}
+</style>
+
+<body>
+    <main>
+    <div class="post-card">
+
+        <h1 class="post-title">{{ post.title }}</h1>
+
+        <div class="author-section">
+            <img src="{{ profile.avatar.url }}" alt="">
+            <div class="author-info">
+                <span class="author-name">{{ post.author }}</span>
+                <span class="author-status">
+                    Последняя активность: {{ profile.last_activity }}
+                </span>
+            </div>
+        </div>
+
+        <div class="post-text">
+            {{ post.text }}
+        </div>
+
+        {% if post.code %}
+        <div class="code-block">
+            <code>{{ post.code }}</code>
+        </div>
+        {% endif %}
+        {% if user.is_authenticated %}
+            {% if user in post.saved_by.all %}
+                <a href="{% url 'save_post' post.id %}" class="save-btn">Убрать из избранного</a>
+            {% else %}
+                <a href="{% url 'save_post' post.id %}"" class="save-btn">Сохранить</a>
+            {% endif %}
+        {% else %}
+        <a href="{% url 'login' %}" class="save-btn'">Войдите, чтобы сохнанить</a>
+        {% endif %}
+    </div>
+</main>
+</body>
+</html>

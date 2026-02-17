@@ -1,0 +1,165 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CodeSearch - {{ request.user.username }}</title>
+<link rel="stylesheet" href="{% static 'css/index.css' %}">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="icon" href="{% static 'images/4844510.png' %}" type="image/x-icon">
+
+<style>
+:root {
+    --bg: #0f1117;
+    --card: #161b22;
+    --border: #262c36;
+    --text: #e6edf3;
+    --muted: #8b949e;
+    --accent: #f39c12;
+    --accent-hover: #00bfff;
+}
+
+/* ===== GLOBAL ===== */
+body {
+    margin: 0;
+    font-family: "Roboto", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+}
+
+a { text-decoration: none; color: inherit; }
+
+/* ===== HEADER ===== */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 40px;
+    height: 70px;
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+}
+
+header .title {
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--text);
+    transition: 0.3s;
+}
+
+header .title:hover { color: var(--accent); }
+
+header .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+header .nav-links a { font-weight: 500; color: var(--muted); }
+header .nav-links a:hover { color: var(--accent); }
+
+header .profile-avatar img {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+}
+
+/* ===== MAIN PROFILE ===== */
+main {
+    display: flex;
+    justify-content: center;
+    padding: 60px 20px;
+}
+
+.profile-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 40px;
+    width: 500px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.profile-card img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+    object-fit: cover;
+}
+
+.profile-card h1.username {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--accent);
+    margin: 0;
+}
+
+.profile-card p.aboutme {
+    font-size: 16px;
+    color: var(--text);
+    text-align: center;
+    line-height: 1.5;
+}
+
+.profile-card .age {
+    font-size: 15px;
+    color: var(--muted);
+}
+
+/* ===== BUTTONS / LINKS ===== */
+.profile-card a.edit-profile {
+    padding: 10px 20px;
+    background: var(--accent);
+    color: black;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: 0.3s;
+    text-decoration: none;
+}
+
+.profile-card a.edit-profile:hover {
+    background: var(--accent-hover);
+    color: white;
+}
+
+</style>
+</head>
+<body>
+
+<header>
+    <a class="title" href="/">CodeSearch</a>
+    <div class="nav-links">
+        <a href="#">О нас</a>
+    </div>
+    <div class="profile-avatar">
+        {% for avatar in profile %}
+            <img src="{{ avatar.avatar.url }}" alt="Avatar">
+        {% endfor %}
+    </div>
+</header>
+
+<main>
+    {% for page in profile %}
+    <div class="profile-card">
+        <img src="{{ page.avatar.url }}" alt="Avatar">
+        <h1 class="username">{{ page.username }}</h1>
+        {% if page.aboutme %}
+            <p class="aboutme">{{ page.aboutme }}</p>
+        {% endif %}
+        {% if page.age %}
+            <span class="age">{{ page.age }} лет</span>
+        {% endif %}
+        <!-- Кнопка редактирования профиля (опционально) -->
+        <a href="/profile_edit" class="edit-profile">Редактировать профиль</a>
+    </div>
+    {% endfor %}
+</main>
+
+</body>
+</html>

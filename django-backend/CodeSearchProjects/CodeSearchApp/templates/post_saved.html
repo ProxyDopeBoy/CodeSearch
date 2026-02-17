@@ -1,0 +1,39 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Сохранённые посты</title>
+<link rel="stylesheet" href="{% static 'css/index.css' %}">
+<style>
+body { background: #0f1117; color: #e6edf3; font-family: "Roboto", sans-serif; margin:0; padding:0;}
+.container { max-width: 900px; margin: 60px auto; padding: 0 20px; }
+.post-card { background:#161b22; border:1px solid #262c36; border-radius:14px; padding:30px; margin-bottom:20px;}
+.post-title { font-size:24px; color:#f39c12; font-weight:700; margin-bottom:10px; }
+.post-text { font-size:16px; line-height:1.6; margin-bottom:10px; }
+.save-btn { display:inline-block; padding:8px 18px; border-radius:8px; background:#f39c12; color:black; text-decoration:none; font-weight:600; transition:.3s;}
+.save-btn:hover { background:#00bfff; color:white;}
+</style>
+</head>
+<body>
+<div class="container">
+    <h1>Сохранённые посты</h1>
+    {% if posts %}
+        {% for post in posts %}
+        <div class="post-card">
+            <a class="post-title" href="{% url 'post' post.id %}">{{ post.title }}</a>
+            <div class="post-text">{{ post.text|truncatewords:30 }}</div>
+            {% if user in post.saved_by.all %}
+                <a href="{% url 'save_post' post.id %}" class="save-btn">Убрать из избранного</a>
+            {% else %}
+                <a href="{% url 'save_post' post.id %}" class="save-btn">Сохранить</a>
+            {% endif %}
+        </div>
+        {% endfor %}
+    {% else %}
+        <p>Вы пока не сохранили ни одного поста.</p>
+    {% endif %}
+</div>
+</body>
+</html>

@@ -1,0 +1,225 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login - CodeSearch</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+    --bg: #0f1117;
+    --card: #161b22;
+    --border: #262c36;
+    --text: #e6edf3;
+    --muted: #8b949e;
+    --accent: #f39c12;
+    --accent-hover: #00bfff;
+}
+
+*{
+    box-sizing: border-box;
+}
+
+body{
+    margin: 0;
+    font-family: "Roboto", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* ===== CARD ===== */
+
+.login-card{
+    background: var(--card);
+    padding: 50px;
+    width: 400px;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    box-shadow: 0 0 30px rgba(0,0,0,0.4);
+}
+
+.login-title{
+    text-align: center;
+    margin-bottom: 40px;
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--accent);
+}
+
+/* ===== FORM ===== */
+
+form{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+input{
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: #0d1117;
+    color: var(--text);
+    font-size: 14px;
+    transition: .3s;
+}
+
+input:focus{
+    outline: none;
+    border: 1px solid var(--accent);
+}
+
+button{
+    padding: 12px;
+    border-radius: 8px;
+    border: none;
+    background: var(--accent);
+    font-weight: 600;
+    cursor: pointer;
+    transition: .3s;
+}
+
+button:hover{
+    background: var(--accent-hover);
+    color: white;
+}
+
+/* ===== LINKS ===== */
+
+.register-link{
+    margin-top: 20px;
+    text-align: center;
+    font-size: 14px;
+    color: var(--muted);
+}
+
+.register-link a{
+    color: var(--accent);
+    text-decoration: none;
+}
+
+.register-link a:hover{
+    color: var(--accent-hover);
+}
+
+/* ===== ERRORS ===== */
+
+.errorlist{
+    color: #ff6b6b;
+    font-size: 13px;
+    list-style: none;
+    padding: 0;
+}
+header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: absolute;
+    top: 0;
+    padding: 0 40px;
+    height: 70px;
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+}
+
+.title{
+    font-size: 22px;
+    font-weight: 600;
+    text-decoration: none;
+    color: var(--text);
+    transition: .3s;
+}
+
+.title:hover{
+    color: var(--accent);
+}
+
+.wrapper-header{
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+.title-about{
+    text-decoration: none;
+    color: var(--muted);
+    transition: .3s;
+}
+
+.title-about:hover{
+    color: var(--accent);
+}
+
+.avatar-container img{
+    border-radius: 50%;
+    border: 2px solid var(--border);
+    transition: .3s;
+}
+
+.avatar-container img:hover{
+    border: 2px solid var(--accent);
+}
+
+
+
+</style>
+</head>
+<body>
+
+ <header>    
+        
+
+        <a class="title" href="/">CodeSearch</a>
+
+        <div class="wrapper-header">
+             <div class="container-header">
+            <ul>
+                <a class="title-about" href="#">About us</a>
+            </ul>
+        </div>
+            {% if request.user.is_authenticated %}
+            <div class="avatar-container">
+                 {% for avatar in profile %}
+                <a href="/profile">
+                    <img style="height: 50px; width: 50px;" src="{{ avatar.avatar.url }}" alt="">
+                </a>
+                 {% endfor %}
+            </div>  
+             {% else %}
+                <div class="auth-buttons">
+                    <a href="/login" class="login-btn">Войти</a>
+                    <a href="/register" class="registe-btn">Регистрация</a>
+
+                </div>
+
+            {% endif %}
+        </div>
+
+
+    </header>
+
+<div class="login-card">
+
+    <div class="login-title">Вход в CodeSearch</div>
+
+    <form method="POST">
+        {% csrf_token %}
+       {{ form.as_p }}
+        <button>
+            Войти
+        </button>
+    </form>
+
+    <div class="register-link">
+        Нет аккаунта? <a href="/register">Зарегистрироваться</a>
+    </div>
+
+</div>
+
+</body>
+</html>

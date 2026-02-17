@@ -1,0 +1,327 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeSearch - Find The Best Solution For Your Problem!</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/index.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link rel="icon" href="{% static 'images/4844510.png' %}" type="image/x-icon">
+
+    <style>
+:root{
+    --bg: #0f1117;
+    --card: #161b22;
+    --border: #262c36;
+    --text: #e6edf3;
+    --muted: #8b949e;
+    --accent: #f39c12;
+    --accent-hover: #00bfff;
+}
+
+*{
+    box-sizing: border-box;
+}
+
+body{
+    margin: 0;
+    font-family: "Roboto", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+}
+
+
+
+header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 40px;
+    height: 70px;
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+}
+
+.title{
+    font-size: 22px;
+    font-weight: 600;
+    text-decoration: none;
+    color: var(--text);
+    transition: .3s;
+}
+
+.title:hover{
+    color: var(--accent);
+}
+
+.wrapper-header{
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+.title-about{
+    text-decoration: none;
+    color: var(--muted);
+    transition: .3s;
+}
+
+.title-about:hover{
+    color: var(--accent);
+}
+
+.avatar-container img{
+    border-radius: 50%;
+    border: 2px solid var(--border);
+    transition: .3s;
+}
+
+.avatar-container img:hover{
+    border: 2px solid var(--accent);
+}
+
+
+
+.container-sidebar{
+    position: fixed;
+    left: 0;
+    top: 70px;
+    width: 240px;
+    height: 100%;
+    background: var(--card);
+    border-right: 1px solid var(--border);
+    padding: 40px 20px;
+}
+
+.ask-question-title{
+    display: block;
+    text-align: center;
+    padding: 12px;
+    border-radius: 8px;
+    background: var(--accent);
+    color: black;
+    font-weight: bold;
+    text-decoration: none;
+    transition: .3s;
+    margin-bottom: 40px;
+}
+
+.ask-question-title:hover{
+    background: var(--accent-hover);
+    color: white;
+}
+
+.ul-container ul{
+    list-style: none;
+    padding: 0;
+}
+
+.ul-container li{
+    margin-bottom: 15px;
+}
+
+.ul-container a{
+    text-decoration: none;
+    color: var(--muted);
+    transition: .3s;
+}
+
+.ul-container a:hover{
+    color: var(--accent);
+}
+
+
+
+main{
+    margin-left: 260px;
+    padding: 40px;
+}
+
+.welcome-container{
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.welcome-container h1{
+    font-size: 28px;
+    font-weight: 600;
+}
+
+
+
+.container-main{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.wrapper{
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 20px;
+    border-radius: 12px;
+    transition: .3s;
+}
+
+.wrapper:hover{
+    border: 1px solid var(--accent);
+    transform: translateY(-3px);
+}
+
+.post-title{
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--accent);
+    text-decoration: none;
+    transition: .3s;
+}
+
+.post-title:hover{
+    color: var(--accent-hover);
+}
+
+.post-text{
+    margin-top: 8px;
+    font-size: 14px;
+    color: var(--muted);
+}
+
+.author-stack-div{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+}
+
+.author-div{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.author-title{
+    font-size: 14px;
+    color: var(--muted);
+}
+
+.stack-title{
+    background: #21262d;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    border: 1px solid var(--border);
+}
+
+
+footer{
+    margin-top: 60px;
+    padding: 30px;
+    text-align: center;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+}
+</style>
+</head>
+<body>
+    <header>    
+        
+
+        <a class="title" href="/">CodeSearch</a>
+
+        <div class="wrapper-header">
+             <div class="container-header">
+            <ul>
+                <a class="title-about" href="#">About us</a>
+            </ul>
+        </div>
+            {% if request.user.is_authenticated %}
+            <div class="avatar-container">
+                 {% for avatar in profile %}
+                <a href="/profile">
+                    <img style="height: 50px; width: 50px;" src="{{ avatar.avatar.url }}" alt="">
+                </a>
+                 {% endfor %}
+            </div>  
+             {% else %}
+                <div class="auth-buttons">
+                    <a href="/login" class="login-btn">Войти</a>
+                    <a href="/register" class="registe-btn">Регистрация</a>
+
+                </div>
+
+            {% endif %}
+        </div>
+
+
+    </header>
+
+    <main>
+        <div class="container-sidebar">
+                <div class="post-button">
+                    <a class="ask-question-title" href="/drop_post">Задать вопрос</a>
+                </div>
+
+            <div class="ul-container">
+                <ul>
+                    <li><a href="post_saved/">Сохраненные</a></li>
+                    <li> </li>
+                    <li> </li>
+                </ul>
+            </div>
+        </div>
+        <div class="welcome-container">
+            <img style="width: 100px" src="{% static 'images/4844510.png' %}">
+            {% if request.user.is_authenticated %}
+                     <h1 style="font-weight: bold; font-size: 30px">Welcome, {{request.user.username}}!</h1>
+            {% else %}
+                    <h1 style="font-weight: bold; font-size: 30px">Welcome!</h1>
+            {% endif %}
+        </div>
+        <div class="container-main">
+            {% for post in posts %}
+                <div class="wrapper">   
+
+                    <div class="title-text">
+                    <a href="/post/{{post.id}}" class="post-title">{{ post.title }}</a>
+                    <p class="post-text">{{post.text}}</p>
+                        {% if post.image %}
+                    <img src="{{ post.image.url }}">
+                        {% else %}
+                             <span></span>
+                        {% endif %}
+                </div>
+
+                    <div class="author-stack-div">
+                         <div class="author-div">
+                              {% for image in profile %}
+
+                    <img style="height: 25px; width: 25px; object-fit: cover;" src="{{ image.avatar.url }}">
+                             {% endfor %}
+                    <h3 class="author-title">{{ post.author }}</h3>
+
+                </div>
+
+                <div class="stack-div">
+                    <span class="stack-title">{{post.stack}}</span>
+                </div>
+                    </div>
+
+                </div>
+                
+            {% endfor %}
+        </div>
+    </main>
+
+    <footer>
+    <div class="container-footer">
+        <div class="logo-title">
+            <img style="height:80px" src="{% static 'images/4844510.png' %}">
+            <h2 class="footer-title">© 2025 CodeSearch inc. <p>Все права защищены</p></h2>
+        </div>
+    </footer>
+
+</body>
+</html>

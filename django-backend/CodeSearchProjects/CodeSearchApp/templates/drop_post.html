@@ -1,0 +1,267 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CodeSearch - Создать пост</title>
+<link rel="stylesheet" href="{% static 'css/index.css' %}">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="icon" href="{% static 'images/4844510.png' %}" type="image/x-icon">
+
+<style>
+:root {
+    --bg: #0f1117;
+    --card: #161b22;
+    --border: #262c36;
+    --text: #e6edf3;
+    --muted: #8b949e;
+    --accent: #f39c12;
+    --accent-hover: #00bfff;
+}
+
+
+body {
+    margin: 0;
+    font-family: "Roboto", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+}
+
+a { text-decoration: none; color: inherit; }
+
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 40px;
+    height: 70px;
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+}
+
+header .title {
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--text);
+    transition: 0.3s;
+}
+
+header .title:hover { color: var(--accent); }
+
+header .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+header .nav-links a { font-weight: 500; color: var(--muted); }
+header .nav-links a:hover { color: var(--accent); }
+
+header .profile-avatar img {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+}
+
+
+main {
+    display: flex;
+    justify-content: center;
+    padding: 60px 20px;
+}
+
+.post-form-container {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 40px;
+    width: 700px;
+}
+
+.post-form-container h1 {
+    color: var(--accent);
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.post-form-container form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.post-form-container input[type="text"],
+.post-form-container textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: #0d1117;
+    color: var(--text);
+    font-size: 15px;
+}
+
+.post-form-container textarea { resize: vertical; min-height: 100px; }
+
+.post-form-container button {
+    padding: 12px 20px;
+    border-radius: 8px;
+    background: var(--accent);
+    color: black;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.post-form-container button:hover {
+    background: var(--accent-hover);
+    color: white;
+}
+
+
+#formset-area .form-item {
+    background: #0d1117;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 15px;
+    position: relative;
+}
+
+#formset-area .form-item span {
+    font-weight: 600;
+    margin-bottom: 10px;
+    display: block;
+    color: var(--accent);
+}
+
+.delete-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: var(--accent);
+    color: black;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: 0.3s;
+}
+
+.delete-btn:hover { background: var(--accent-hover); color: white; }
+
+#add-example {
+    align-self: flex-start;
+    background: var(--accent);
+    color: black;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 15px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+#add-example:hover { background: var(--accent-hover); color: white; }
+
+</style>
+</head>
+<body>
+
+<header>
+    <a class="title" href="/">CodeSearch</a>
+    <div class="nav-links">
+        <a href="#">О нас</a>
+    </div>
+    <div class="profile-avatar">
+        {% for avatar in profile %}
+            <img src="{{ avatar.avatar.url }}" alt="Avatar">
+        {% endfor %}
+    </div>
+</header>
+
+<main>
+    <div class="post-form-container">
+        <h1>Создать новый пост</h1>
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            {{ formset.management_form }}
+
+            <div id="formset-area">
+                {% for f in formset %}
+                    <div class="form-item">
+                        <span>Пример {{ forloop.counter }}</span>
+                        <code>{{ f.as_p }}</code>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <button type="button" id="add-example">Добавить пример кода</button>
+            <button type="submit">Опубликовать</button>
+        </form>
+    </div>
+</main>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const addBtn = document.getElementById('add-example');
+    const formsetArea = document.getElementById('formset-area');
+    const totalFormsInput = document.querySelector('[name="{{ formset.management_form.prefix }}-TOTAL_FORMS"]');
+    let formCount = parseInt(totalFormsInput.value);
+
+    function updateFormIndices() {
+        const forms = formsetArea.querySelectorAll('.form-item');
+        forms.forEach((formDiv, index) => {
+            const span = formDiv.querySelector('span');
+            if(span) span.textContent = `Пример ${index + 1}`;
+            formDiv.querySelectorAll('input, textarea, select, label').forEach(el => {
+                if(el.name) el.name = el.name.replace(/form-(\d+)-/, `form-${index}-`);
+                if(el.id) el.id = el.id.replace(/form-(\d+)-/, `form-${index}-`);
+                if(el.htmlFor) el.htmlFor = el.htmlFor.replace(/form-(\d+)-/, `form-${index}-`);
+            });
+        });
+        formCount = forms.length;
+        totalFormsInput.value = formCount;
+    }
+
+    function createDeleteButton(formDiv) {
+        const delBtn = document.createElement('button');
+        delBtn.type = 'button';
+        delBtn.textContent = 'Удалить пример';
+        delBtn.classList.add('delete-btn');
+        delBtn.addEventListener('click', function () {
+            formDiv.remove();
+            updateFormIndices();
+        });
+        return delBtn;
+    }
+
+    addBtn.addEventListener('click', function () {
+        const template = formsetArea.querySelector('.form-item');
+        if(!template) return;
+        const newForm = template.cloneNode(true);
+        formCount++;
+        newForm.querySelector('span').textContent = `Пример ${formCount}`;
+        newForm.querySelectorAll('input, textarea, select').forEach(el => {
+            el.value = '';
+            if(el.name) el.name = el.name.replace(/form-(\d+)-/, `form-${formCount-1}-`);
+            if(el.id) el.id = el.id.replace(/form-(\d+)-/, `form-${formCount-1}-`);
+        });
+        const deleteBtn = createDeleteButton(newForm);
+        newForm.appendChild(deleteBtn);
+        formsetArea.appendChild(newForm);
+        totalFormsInput.value = formCount;
+    });
+});
+</script>
+
+</body>
+</html>
